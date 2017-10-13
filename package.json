@@ -1,6 +1,6 @@
 {
   "name": "angular-start-app",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
@@ -21,7 +21,9 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "angular-in-memory-web-api": "^0.5.0",
     "core-js": "^2.4.1",
+    "pg-promise": "^7.0.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
   },
@@ -45,5 +47,21 @@
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
     "typescript": "~2.3.3"
-  }
+  },
+  "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.4.5.",
+  "main": "karma.conf.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xninjaxelitex/angular-start-app.git"
+  },
+  "keywords": [
+    "angular",
+    "start",
+    "tutorial"
+  ],
+  "author": "Magomed Arsaev",
+  "bugs": {
+    "url": "https://github.com/xninjaxelitex/angular-start-app/issues"
+  },
+  "homepage": "https://github.com/xninjaxelitex/angular-start-app#readme"
 }
