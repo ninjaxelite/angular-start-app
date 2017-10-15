@@ -32,7 +32,8 @@ export class HeroDetailComponent implements OnInit {
     }
 
     save(): void {
-      this.heroService.update(this.hero)
-        .then(() => this.goBack());
+      this.route.paramMap
+      .switchMap((params: ParamMap) => this.heroService.update(this.hero))
+        .subscribe(() => this.goBack());
     }
 }

@@ -34,7 +34,8 @@ export class HeroService {
 
     update(hero: Hero): Promise<Hero> {
       const url = `${this.heroesUrl}/hero/update/${hero.id}`;
-      return this.http.post(url, JSON.stringify(hero), {headers: this.headers})
+      console.info('update url: '+url);
+      return this.http.put(url, JSON.stringify(hero), {headers: this.headers})
         .toPromise()
         .then(() => hero).catch(this.handleError);
     }

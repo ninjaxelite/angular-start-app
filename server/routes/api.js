@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const pg = require('pg'); //require('pg-promise')(/*options*/)
-const dbUrl = 'pg://postgres:postgres@localhost:5432/angularDB';
+const dbUrl = 'pg://postgres:@localhost:5432/postgres';
 const client = new pg.Client(dbUrl);
 client.connect();
 
@@ -23,7 +23,7 @@ const heroes = [
 
   //db.query('INSERT INTO $1~($2~) VALUES($3~,$4~)', ['heroes', 'heroname', '1', 'myhero']);
 
-  client.query("INSERT INTO heroes(id_pk,heroname) values($1,$2)", ['3','myherooo']);
+  //client.query("INSERT INTO heroes(id_pk,heroname) values($1,$2)", ['4','dudelo']);
 
  /* pg.connect(dbUrl, function(err, client, done) {
     var i = 0, count = 0; 
@@ -57,7 +57,7 @@ router.get('/heroes/hero/:id', (req, res) => {
   res.send(JSON.stringify(heroes.find(hero => hero.id === Number(req.params.id))));
 });
 
-router.get('/heroes/hero/update/:id', (req, res) => {
+router.put('/heroes/hero/update/:id', (req, res) => {
   let h = req.params.id;
   console.info("save: "+h);
   res.send(JSON.stringify("ok"));
