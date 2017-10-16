@@ -2,18 +2,20 @@ import { Injectable } from '@angular/core';
 import { Hero } from './hero';
 import 'rxjs/add/operator/toPromise';
 import { Headers, Http } from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class HeroService {
-   private heroesUrl = 'http://localhost:3000/api/heroes';  // URL to web api 
+   private heroesUrl = '/api/heroes';  // URL to web api 
    private headers = new Headers({'Content-Type': 'application/json'});
 
    constructor(private http: Http) { }
     
    getHeroes(): Promise<Hero[]> {
-     return this.http.get(this.heroesUrl)
-                .toPromise()
-                .then(response => response.json() as Hero[])
+     let xx =  this.http.get(this.heroesUrl)
+                .toPromise();
+                console.info("asdf");
+                return xx.then(response => response.json() as Hero[])
                 .catch(this.handleError);
    }
     

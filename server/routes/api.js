@@ -1,5 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser');
+const jsonBody = require("body/json")
+
+router.use(bodyParser.urlencoded({
+    extended: true
+}));
+router.use(bodyParser.json());
 
 const pg = require('pg'); //require('pg-promise')(/*options*/)
 const dbUrl = 'pg://postgres:@localhost:5432/postgres';
@@ -58,8 +65,12 @@ router.get('/heroes/hero/:id', (req, res) => {
 });
 
 router.put('/heroes/hero/update/:id', (req, res) => {
-  let h = req.params.id;
-  console.info("save: "+h);
+  let id = req.params.id;
+  let z = yield jsonBody(req, res);
+  console.log("body: "+z);
+  let name = JSON.parse(z).hero.name;
+  console.info("saving hero: "+name+" with id: "+id);
+  client.query("update heroes set heroname=$2 where id_pk=$1)", [h, name]);
   res.send(JSON.stringify("ok"));
 });
 
