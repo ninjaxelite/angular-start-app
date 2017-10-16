@@ -1,12 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
-const jsonBody = require("body/json")
-
-router.use(bodyParser.urlencoded({
-    extended: true
-}));
-router.use(bodyParser.json());
 
 const pg = require('pg'); //require('pg-promise')(/*options*/)
 const dbUrl = 'pg://postgres:@localhost:5432/postgres';
@@ -57,21 +50,37 @@ const heroes = [
 
 
 router.get('/heroes', (req, res) => {
-  res.send(JSON.stringify(heroes));
+    client.query("select * from heroes;")
+    .then(resp => {
+        console.log(resp);
+        res.send(JSON.stringify(resp.rows));
+    })
+    .catch(e => console.error(e.stack));
 });
 
 router.get('/heroes/hero/:id', (req, res) => {
   res.send(JSON.stringify(heroes.find(hero => hero.id === Number(req.params.id))));
 });
 
-router.put('/heroes/hero/update/:id', (req, res) => {
+router.put('/heroes/hero/update/:id', function (req, res) {
+    console.log(req.body);
+    //let h = req.body.hero.name;
+    //console.log(h);
+    client.query("update heroes set heroname=$2 where id_pk=$1", [''+req.body.id, ''+req.body.name])
+        .then(resp => console.log(resp))
+        .catch(e => console.error(e.stack));
+    //client.query("INSERT INTO heroes(id_pk,heroname) values($1,$2)", [''+req.body.id,''+req.body.name]);
+    res.send("ok");
+  });
+
+/*router.put('/heroes/hero/update/:id', (req, res) => {
   let id = req.params.id;
-  let z = yield jsonBody(req, res);
+  let z = req.hero;
   console.log("body: "+z);
-  let name = JSON.parse(z).hero.name;
+  let name = JSON.parse(z).name;
   console.info("saving hero: "+name+" with id: "+id);
   client.query("update heroes set heroname=$2 where id_pk=$1)", [h, name]);
   res.send(JSON.stringify("ok"));
-});
+});*/
 
 module.exports = router;
