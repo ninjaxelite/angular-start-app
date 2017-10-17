@@ -22,6 +22,29 @@ export class HeroesComponent implements OnInit{
     this.selectedHero = hero;
   }
 
+  addHero(name: string): void {
+    name = name.trim();
+    if(!name){
+      return;
+    }
+    this.heroService.createHero(new Hero(0,name))
+      .then(hero => { 
+        this.heroes.push(hero);
+        this.selectedHero = null;
+      });
+  }
+
+  delHero(hero: Hero): void {
+    if(this.heroes.length == 0){
+      return;
+    }
+    this.heroService.deleteHero(hero)
+      .then(() => {
+        this.heroes.splice(this.heroes.indexOf(hero), 1);
+        this.selectedHero = null
+      });
+  }
+
   ngOnInit(): void {
     this.getHeroes();
   }

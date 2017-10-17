@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const pg = require('pg'); //require('pg-promise')(/*options*/)
-const dbUrl = 'pg://postgres:@localhost:5432/postgres';
+const dbUrl = 'pg://postgres:postgres@localhost:5432/angularDB';
 const client = new pg.Client(dbUrl);
 client.connect();
 
@@ -59,28 +59,39 @@ router.get('/heroes', (req, res) => {
 });
 
 router.get('/heroes/hero/:id', (req, res) => {
-  res.send(JSON.stringify(heroes.find(hero => hero.id === Number(req.params.id))));
+  client.query("select * from heroes where id_pk=$1;", [req.params.id])
+    .then(resp => {
+      console.log(resp);
+      res.send(JSON.stringify(resp.rows[0]));
+    })
+    .catch(e => console.error(e.stack));
 });
 
 router.put('/heroes/hero/update/:id', function (req, res) {
-    console.log(req.body);
-    //let h = req.body.hero.name;
-    //console.log(h);
-    client.query("update heroes set heroname=$2 where id_pk=$1", [''+req.body.id, ''+req.body.name])
-        .then(resp => console.log(resp))
+    client.query("update heroes set heroname=$2 where id_pk=$1", [req.body.id, req.body.name])
+        .then(resp => {
+          console.log(resp);
+          res.send("ok");
+        })
         .catch(e => console.error(e.stack));
-    //client.query("INSERT INTO heroes(id_pk,heroname) values($1,$2)", [''+req.body.id,''+req.body.name]);
-    res.send("ok");
   });
 
-/*router.put('/heroes/hero/update/:id', (req, res) => {
-  let id = req.params.id;
-  let z = req.hero;
-  console.log("body: "+z);
-  let name = JSON.parse(z).name;
-  console.info("saving hero: "+name+" with id: "+id);
-  client.query("update heroes set heroname=$2 where id_pk=$1)", [h, name]);
-  res.send(JSON.stringify("ok"));
-});*/
+router.put('/heroes/hero/new', function (req, res) {
+  client.query("insert into heroes(heroname) values($1) returning id_pk", [req.body.name])
+    .then(resp => {
+      console.log(resp.rows);
+      res.send(JSON.stringify(resp.rows[0]));
+    })
+    .catch(e => console.error(e.stack));
+});
+
+router.put('/heroes/hero/delete', function (req, res) {
+  client.query("delete from heroes where id_pk=$1", [req.body.id])
+    .then(resp => {
+      console.log(resp.rows);
+      res.send("ok");
+    })
+    .catch(e => console.error(e.stack));
+});
 
 module.exports = router;
